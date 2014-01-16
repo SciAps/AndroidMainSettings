@@ -1,7 +1,14 @@
 package com.sciaps.android.libs.mainsettings;
 
+import java.util.List;
 import java.util.Locale;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -17,37 +24,95 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String ACTION_PREFS_ONE = "One";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_settings);
 
         addPreferencesFromResource(R.xml.prefs);
 
+        ProgressBarPref prefBat = (ProgressBarPref) findPreference("pref_key_battery_lev");
+        prefBat.setProgress(99);
+        prefBat.setLabel("99%");
+
+        ProgressBarPref prefArg = (ProgressBarPref) findPreference("pref_key_argon");
+        prefArg.setProgress(91);
+        prefArg.setLabel("91%");
+
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings, menu);
-        return true;
+    protected void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onResume() {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("pref_key_factory_md2")) {
+
+            CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+
+            if (prefFact.isChecked()) {
+                prefFact.setChecked(false);
+                showPasswordDialog();
+            }
+
+
         }
-        return super.onOptionsItemSelected(item);
     }
+
+    private void showPasswordDialog() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Enter Password");
+        alert.setMessage("");
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        input.setPadding(40,40,40,40);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                // Do something with value!
+                if (value.equals("123")) {
+
+                    CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+                    prefFact.setChecked(true);
+                    prefFact.setIcon(R.drawable.ic_action_brightness_auto);
+                    return;
+
+
+                }
+
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+                return;
+
+            }
+        });
+
+        alert.show();
+
+    }
+
 
 }
