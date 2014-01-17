@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceScreen
         android:key="button_device_stats"
         android:title="Device Status"
@@ -13,7 +13,7 @@
                 android:key="pref_key_argon"
                 android:summary="49%"
                 android:title="Argon Level"
-                android:icon="@drawable/ic_action_brightness_auto"/>
+                android:icon="@drawable/ic_action_brightness_auto" />
         </PreferenceCategory>
         <PreferenceCategory
             android:key="pref_key_more_settings"
@@ -24,8 +24,7 @@
                 android:icon="@drawable/ic_action_battery"
                 android:key="pref_key_battery_stat"
                 android:summary="Charging"
-                android:title="Battery Status"
-                />
+                android:title="Battery Status" />
 
 
             <com.sciaps.android.libs.mainsettings.ProgressBarPref
@@ -35,25 +34,31 @@
                 android:summary="42%"
                 android:title="Battery Level" />
         </PreferenceCategory>
-
+        <Preference
+            android:icon="@drawable/ic_temp"
+            android:summary="44"
+            android:title="°C Temp" />
 
     </PreferenceScreen>
     <PreferenceCategory
-        android:icon="@drawable/ic_action_battery"
         android:title="Settings">
 
-<CheckBoxPreference
-    android:title="Factory Mode "
-    android:icon="@android:drawable/ic_delete"
-    android:key="pref_key_factory_md2"/>
-
-        <EditTextPreference
-            android:title="Factory Mode 1"
-            android:dialogTitle="Enter Password"
+        <CheckBoxPreference
+            android:title="Factory Mode "
             android:icon="@android:drawable/ic_delete"
-            android:key="pref_key_factory_md"
-            />
-        </PreferenceCategory>
+            android:key="pref_key_factory_md2" />
+
+
+        <ListPreference
+            android:title="Temprature"
+            android:icon="@drawable/ic_temp"
+
+            android:entries="@array/listTempArray"
+            android:summary="°C"
+            android:entryValues="@array/listTempValues"
+            android:key="pref_key_temp" />
+
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

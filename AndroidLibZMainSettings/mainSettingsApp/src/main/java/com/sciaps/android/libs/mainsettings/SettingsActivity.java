@@ -1,38 +1,33 @@
 package com.sciaps.android.libs.mainsettings;
 
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.preference.CheckBoxPreference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import com.sciaps.android.libs.mainsettings.utils.LibzSettings;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String ACTION_PREFS_ONE = "One";
+    private static final String FACTORY_MODE_PASSWORD ="123" ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        LibzSettings ls = new LibzSettings(getApplicationContext());
+
+
+        PreferenceManager prefMgr = getPreferenceManager();
+        prefMgr.setSharedPreferencesName("libz_main");
+        prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+
 
         addPreferencesFromResource(R.xml.prefs);
 
@@ -44,13 +39,24 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         prefArg.setProgress(91);
         prefArg.setLabel("91%");
 
+        CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+        if (prefFact.isChecked()) {
+
+            prefFact.setIcon(R.drawable.ic_check);
+
+        }else {
+            prefFact.setIcon(android.R.drawable.ic_delete);
+
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+                .unregisterOnSharedPreferenceChangeListener(this);
+
     }
 
     @Override
@@ -61,19 +67,35 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+
         if (key.equals("pref_key_factory_md2")) {
 
-            CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
 
-            if (prefFact.isChecked()) {
-                prefFact.setChecked(false);
-                showPasswordDialog();
-            }
+                CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+
+                if (prefFact.isChecked()) {
+
+
+                    if (changeFMPref){
+                        //firstTime
+
+                    prefFact.setChecked(false);
+                    showPasswordDialog();
+
+                    }else {
+                        changeFMPref =true;
+                    }
+                }else {
+                    prefFact.setIcon(android.R.drawable.ic_delete);
+
+                }
 
 
         }
+        LibzSettings.writeSettingsXml();
     }
-
+    private boolean changeFMPref = true;
     private void showPasswordDialog() {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -89,15 +111,21 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 // Do something with value!
-                if (value.equals("123")) {
+                if (value.equals(FACTORY_MODE_PASSWORD)) {
+                    changeFMPref = false;
 
                     CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
                     prefFact.setChecked(true);
-                    prefFact.setIcon(R.drawable.ic_action_brightness_auto);
+
+                    prefFact.setIcon(R.drawable.ic_check);
+
                     return;
 
 
+                }else {
+                    Toast.makeText(getApplicationContext(),"Wrong Password, No Permission!",Toast.LENGTH_LONG).show();
                 }
+
 
             }
         });
@@ -106,7 +134,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
                 return;
-
             }
         });
 
