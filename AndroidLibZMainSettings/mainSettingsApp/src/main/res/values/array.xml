@@ -2,11 +2,11 @@
 <resources>
 
     <string-array name="listTempArray">
-        <item>°C</item>
         <item>°F</item>
+        <item>°C</item>
     </string-array>
     <string-array name="listTempValues">
+        <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
 </resources>

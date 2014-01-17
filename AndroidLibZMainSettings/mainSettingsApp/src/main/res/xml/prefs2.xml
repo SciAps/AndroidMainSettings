@@ -11,7 +11,7 @@
         android:title="Argon"
 
         >
-        <com.sciaps.android.libs.mainsettings.ProgressBarPref
+        <com.sciaps.android.libs.mainsettings.utils.ProgressBarPref
             android:key="pref_key_argon"
             android:summary="49%"
             android:title="Argon Level"
@@ -30,7 +30,7 @@
             />
 
 
-        <com.sciaps.android.libs.mainsettings.ProgressBarPref
+        <com.sciaps.android.libs.mainsettings.utils.ProgressBarPref
             android:icon="@drawable/ic_action_battery"
 
             android:key="pref_key_battery_lev"

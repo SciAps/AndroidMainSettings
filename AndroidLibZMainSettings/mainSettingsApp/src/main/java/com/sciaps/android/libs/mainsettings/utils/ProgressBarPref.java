@@ -1,4 +1,4 @@
-package com.sciaps.android.libs.mainsettings;
+package com.sciaps.android.libs.mainsettings.utils;
 
 import android.app.Service;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.sciaps.android.libs.mainsettings.R;
 
 /**
  * Created by MonkeyFish on 1/16/14.

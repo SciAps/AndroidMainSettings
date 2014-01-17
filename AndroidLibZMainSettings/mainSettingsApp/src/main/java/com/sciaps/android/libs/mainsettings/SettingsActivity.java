@@ -5,21 +5,26 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.sciaps.android.libs.mainsettings.utils.HardwareStatus;
 import com.sciaps.android.libs.mainsettings.utils.LibzSettings;
+import com.sciaps.android.libs.mainsettings.utils.ProgressBarPref;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String ACTION_PREFS_ONE = "One";
     private static final String FACTORY_MODE_PASSWORD ="123" ;
+    private static final int FAHRENHEIT = 0;
+    private static final int CELSIUS = 1;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         LibzSettings ls = new LibzSettings(getApplicationContext());
 
@@ -31,15 +36,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         addPreferencesFromResource(R.xml.prefs);
 
-        ProgressBarPref prefBat = (ProgressBarPref) findPreference("pref_key_battery_lev");
-        prefBat.setProgress(99);
-        prefBat.setLabel("99%");
+        getHardwareStats();
 
-        ProgressBarPref prefArg = (ProgressBarPref) findPreference("pref_key_argon");
-        prefArg.setProgress(91);
-        prefArg.setLabel("91%");
 
-        CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+
+
+        CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md");
         if (prefFact.isChecked()) {
 
             prefFact.setIcon(R.drawable.ic_check);
@@ -48,6 +50,51 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             prefFact.setIcon(android.R.drawable.ic_delete);
 
         }
+
+    }
+
+    private void getHardwareStats() {
+        HardwareStatus hs = new HardwareStatus();
+
+        SharedPreferences prefs = getPreferenceScreen().getSharedPreferences();
+
+        int temprature = 0;
+        try {
+            temprature = Integer.parseInt(prefs.getString("pref_key_temp", FAHRENHEIT+""));
+            String s = temprature==0?("°F " +hs.getTempF()):("°C " +hs.getTempC());
+
+            findPreference("pref_key_temp").setSummary(temprature == 0 ? "°F" : "°C");
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        Preference statTemp = findPreference("stats_key_temp");
+
+        String s = temprature==0?("°F " +hs.getTempF()):("°C " +hs.getTempC());
+
+
+        statTemp.setSummary(s);
+
+
+
+        ProgressBarPref prefBat = (ProgressBarPref) findPreference("stats_key_battery_lev");
+        prefBat.setProgress(hs.getBatteryLevel());
+
+        findPreference("stats_key_battery_state") .setSummary(hs.getBatteryStatus());
+
+        prefBat.setLabel(hs.getBatteryLevel()+"%");
+
+        ProgressBarPref prefArg = (ProgressBarPref) findPreference("stats_key_argon");
+        prefArg.setProgress(hs.getArgonLevel());
+        prefArg.setLabel(hs.getArgonLevel()+"%");
+
+      
+        int[] xyz =hs.getXYZStatus();
+        findPreference("stats_key_x").setSummary(xyz[0]+"");
+        findPreference("stats_key_y").setSummary(xyz[1]+"");
+        findPreference("stats_key_z").setSummary(xyz[2]+"");
+
 
     }
 
@@ -69,10 +116,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
 
-        if (key.equals("pref_key_factory_md2")) {
+        if (key.equals("pref_key_factory_md")) {
 
 
-                CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+                CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md");
 
                 if (prefFact.isChecked()) {
 
@@ -92,7 +139,32 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
 
 
+        }else if(key.equals("pref_key_temp")){
+            int temprature = 0;
+            HardwareStatus hs = new HardwareStatus();
+            try {
+                temprature = Integer.parseInt(sharedPreferences.getString(key, FAHRENHEIT+""));
+              
+                String s = temprature==0?("°F " +hs.getTempF()):("°C " +hs.getTempC());
+
+                findPreference("pref_key_temp").setSummary(temprature == 0 ? "°F" : "°C");
+
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+            Preference statTemp = findPreference("stats_key_temp");
+
+            String s = temprature==0?("°F " +hs.getTempF()):("°C " +hs.getTempC());
+
+
+            statTemp.setSummary(s);
+
         }
+        
+        
+        
+        
         LibzSettings.writeSettingsXml();
     }
     private boolean changeFMPref = true;
@@ -114,7 +186,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 if (value.equals(FACTORY_MODE_PASSWORD)) {
                     changeFMPref = false;
 
-                    CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md2");
+                    CheckBoxPreference prefFact = (CheckBoxPreference) findPreference("pref_key_factory_md");
                     prefFact.setChecked(true);
 
                     prefFact.setIcon(R.drawable.ic_check);

@@ -7,10 +7,12 @@ public interface LibzHardwareStatus {
 
     int getBatteryLevel();
 
+    String getBatteryStatus(); //charging not connected
+
     int getArgonLevel();
 
     int[] getXYZStatus();
 
-    int getTemp(boolean isFahrenheit);
+    int getTempF();
 
 }

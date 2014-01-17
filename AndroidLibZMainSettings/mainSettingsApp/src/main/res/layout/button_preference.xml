@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical"
+    android:paddingRight="?android:attr/scrollbarSize"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/preference_super_container"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        >
+
+        </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/btn_pref"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Calibrate"
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:layout_alignParentRight="true"
+            android:text="Some Small Text"
+            android:id="@+id/summary"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15sp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            android:maxLines="4"
+            />
+    </LinearLayout>
+
+</LinearLayout>

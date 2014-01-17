@@ -9,9 +9,8 @@
             android:title="Argon"
 
             >
-            <com.sciaps.android.libs.mainsettings.ProgressBarPref
-                android:key="pref_key_argon"
-                android:summary="49%"
+            <com.sciaps.android.libs.mainsettings.utils.ProgressBarPref
+                android:key="stats_key_argon"
                 android:title="Argon Level"
                 android:icon="@drawable/ic_action_brightness_auto" />
         </PreferenceCategory>
@@ -22,31 +21,27 @@
             >
             <Preference
                 android:icon="@drawable/ic_action_battery"
-                android:key="pref_key_battery_stat"
-                android:summary="Charging"
+                android:key="stats_key_battery_state"
                 android:title="Battery Status" />
-
-
-            <com.sciaps.android.libs.mainsettings.ProgressBarPref
+            <com.sciaps.android.libs.mainsettings.utils.ProgressBarPref
                 android:icon="@drawable/ic_action_battery"
-
-                android:key="pref_key_battery_lev"
-                android:summary="42%"
+                android:key="stats_key_battery_lev"
                 android:title="Battery Level" />
         </PreferenceCategory>
         <Preference
+            android:key="stats_key_temp"
             android:icon="@drawable/ic_temp"
             android:summary="44"
-            android:title="°C Temp" />
+            android:title="Temp" />
 
     </PreferenceScreen>
     <PreferenceCategory
         android:title="Settings">
 
         <CheckBoxPreference
-            android:title="Factory Mode "
+            android:title="Factory Mode"
             android:icon="@android:drawable/ic_delete"
-            android:key="pref_key_factory_md2" />
+            android:key="pref_key_factory_md" />
 
 
         <ListPreference
@@ -58,7 +53,45 @@
             android:entryValues="@array/listTempValues"
             android:key="pref_key_temp" />
 
+
+
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Callibrate">
+        <com.sciaps.android.libs.mainsettings.utils.ButtonPref
+            android:key="pref_key_btn_cal"
+            android:title="Calibrate Laser"
+            />
 
 
+    </PreferenceCategory>
+    <PreferenceScreen
+        android:title="XYZ Stage"
+        android:dependency="pref_key_factory_md"
+
+        android:persistent="false">
+    <PreferenceCategory
+        android:title="XYZ Stage"
+
+        >
+        <Preference
+            android:key="stats_key_x"
+            android:title="X" />
+        <Preference
+            android:key="stats_key_y"
+            android:title="Y" />
+        <Preference
+            android:key="stats_key_z"
+            android:title="Z" />
+    </PreferenceCategory>
+        <PreferenceCategory
+            android:title="Auto Adjust XYZ">
+            <com.sciaps.android.libs.mainsettings.utils.ButtonPref
+                android:key="xyz_key_btn_adj"
+                android:title="Adjust XYZ"
+                />
+
+
+        </PreferenceCategory>
+        </PreferenceScreen>
 </PreferenceScreen>
