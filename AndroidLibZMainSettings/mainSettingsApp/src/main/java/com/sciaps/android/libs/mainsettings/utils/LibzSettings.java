@@ -1,7 +1,9 @@
 package com.sciaps.android.libs.mainsettings.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.util.Xml;
 
@@ -38,13 +40,13 @@ public class LibzSettings {
         }
     }
 
-    public boolean isFactoryMode() {
-        return factoryMode;
-    }
 
-    public static boolean writeSettingsXml(){
+    public static boolean writeSettingsXml(Context ctx){
         //create a new file called "new.xml" in the SD card
         //File newxmlfile = new File(Environment.getExternalStorageDirectory()+"/settings.xml");
+
+
+
 
         File newDir = new File(Environment.getExternalStorageDirectory()+"/LibZ");
         newDir.mkdirs();
@@ -75,19 +77,33 @@ public class LibzSettings {
             serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
             //start a tag called "root"
             serializer.startTag(null, "device_settings");
-            //i indent code just to have a view similar to xml-tree
+
             serializer.startTag(null, "factory_mode");
-            serializer.text(String.valueOf(false));
+
+            serializer.text(String.valueOf(isFactoryMode(ctx)));
+
             serializer.endTag(null, "factory_mode");
 
-            serializer.startTag(null, "child2");
-            //set an attribute called "attribute" with a "value" for <child2>
-            serializer.attribute(null, "attribute", "value");
-            serializer.endTag(null, "child2");
+            serializer.startTag(null, "temprature_is_f");
+            serializer.text(getTempSetting(ctx));
+            serializer.endTag(null, "temprature_is_f");
 
-            serializer.startTag(null, "child3");
-            //write some text inside <child3>
-            serializer.endTag(null, "child3");
+
+            serializer.startTag(null, "xyz_stage");
+
+            serializer.startTag(null, "x_stage");
+            serializer.text(getX(ctx)+"");
+            serializer.endTag(null, "x_stage");
+
+            serializer.startTag(null, "y_stage");
+            serializer.text(getY(ctx)+"");
+            serializer.endTag(null, "y_stage");
+
+            serializer.startTag(null, "z_stage");
+            serializer.text(getZ(ctx)+"");
+            serializer.endTag(null, "z_stage");
+
+            serializer.endTag(null, "xyz_stage");
 
             serializer.endTag(null, "device_settings");
             serializer.endDocument();
@@ -131,10 +147,6 @@ public class LibzSettings {
         } else {
             Log.w(TAG, "GIF image is not available!");
         }
-
-
-
-
 
         XmlPullParserFactory pullParserFactory;
         try {
@@ -194,6 +206,45 @@ public class LibzSettings {
             eventType = parser.next();
 
         }
+    }
+
+    public static boolean sendNewXYZToHardware(int x,int y, int z){
+        try {
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    };
+
+
+
+
+    public static boolean isFactoryMode(Context ctx) {
+        SharedPreferences prefs = ctx.getSharedPreferences("libz_main",PreferenceActivity.MODE_PRIVATE);
+
+
+
+        return prefs.getBoolean("pref_key_factory_md", false);
+    }
+    public static int getX(Context ctx) {
+        SharedPreferences prefs = ctx.getSharedPreferences("libz_main",PreferenceActivity.MODE_PRIVATE);
+
+        return  prefs.getInt("pref_key_x", 0);
+    }
+    public static int getY(Context ctx) {
+        SharedPreferences prefs = ctx.getSharedPreferences("libz_main",PreferenceActivity.MODE_PRIVATE);
+
+        return  prefs.getInt("pref_key_y", 0);
+    }
+    public static int getZ(Context ctx) {
+        SharedPreferences prefs = ctx.getSharedPreferences("libz_main",PreferenceActivity.MODE_PRIVATE);
+
+        return  prefs.getInt("pref_key_z", 0);
+    }
+    public static String getTempSetting(Context ctx) {
+        SharedPreferences prefs = ctx.getSharedPreferences("libz_main",PreferenceActivity.MODE_PRIVATE);
+
+        return  prefs.getString("pref_key_temp", "0");
     }
 
 }

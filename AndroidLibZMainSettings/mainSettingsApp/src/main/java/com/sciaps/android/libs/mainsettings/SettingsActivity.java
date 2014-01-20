@@ -16,7 +16,6 @@ import com.sciaps.android.libs.mainsettings.utils.LibzSettings;
 import com.sciaps.android.libs.mainsettings.utils.ProgressBarPref;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String ACTION_PREFS_ONE = "One";
     private static final String FACTORY_MODE_PASSWORD ="123" ;
     private static final int FAHRENHEIT = 0;
     private static final int CELSIUS = 1;
@@ -26,12 +25,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         LibzSettings ls = new LibzSettings(getApplicationContext());
 
 
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName("libz_main");
-        prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+       // prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
 
         addPreferencesFromResource(R.xml.prefs);
@@ -52,6 +52,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
 
     }
+
+    private void clearPrefsForTesting() {
+		SharedPreferences mainpreferences = getSharedPreferences("libz_main",MODE_PRIVATE);
+    	SharedPreferences.Editor editor = mainpreferences.edit();
+    	editor.clear();
+    	editor.commit();
+	}
 
     private void getHardwareStats() {
         HardwareStatus hs = new HardwareStatus();
@@ -91,6 +98,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
       
         int[] xyz =hs.getXYZStatus();
+
         findPreference("stats_key_x").setSummary(xyz[0]+"");
         findPreference("stats_key_y").setSummary(xyz[1]+"");
         findPreference("stats_key_z").setSummary(xyz[2]+"");
@@ -165,7 +173,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         
         
         
-        LibzSettings.writeSettingsXml();
+        LibzSettings.writeSettingsXml(getApplicationContext());
     }
     private boolean changeFMPref = true;
     private void showPasswordDialog() {

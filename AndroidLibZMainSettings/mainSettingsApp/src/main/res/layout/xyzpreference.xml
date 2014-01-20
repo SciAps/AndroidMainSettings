@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/preference_super_container"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="vertical">
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp">
+
+
+            <Button
+                android:id="@+id/btn_minus"
+                style="?android:attr/buttonStyleSmall"
+                android:tag="-"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="-"
+                android:paddingTop="0dp"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:gravity="center" />
+
+            <SeekBar
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:progress="20"
+                android:max="100"
+                android:id="@+id/seekBar" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:id="@+id/btn_plus"
+                android:tag="+"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="+"
+                android:paddingTop="0dp"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:gravity="center" />
+
+
+        </LinearLayout>
+
+</LinearLayout>

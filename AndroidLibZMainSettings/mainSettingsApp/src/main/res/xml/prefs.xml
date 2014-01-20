@@ -34,6 +34,21 @@
             android:summary="44"
             android:title="Temp" />
 
+        <PreferenceCategory
+            android:title="XYZ Stage"
+
+            >
+            <Preference
+                android:key="stats_key_x"
+                android:title="X"
+                />
+            <Preference
+                android:key="stats_key_y"
+                android:title="Y" />
+            <Preference
+                android:key="stats_key_z"
+                android:title="Z" />
+        </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceCategory
         android:title="Settings">
@@ -69,20 +84,24 @@
         android:title="XYZ Stage"
         android:dependency="pref_key_factory_md"
 
-        android:persistent="false">
+        android:persistent="false"
+        >
     <PreferenceCategory
         android:title="XYZ Stage"
 
         >
-        <Preference
-            android:key="stats_key_x"
-            android:title="X" />
-        <Preference
-            android:key="stats_key_y"
-            android:title="Y" />
-        <Preference
-            android:key="stats_key_z"
-            android:title="Z" />
+        <com.sciaps.android.libs.mainsettings.utils.XYZPref
+            android:key="pref_key_x"
+            android:title="X"
+            />
+        <com.sciaps.android.libs.mainsettings.utils.XYZPref
+            android:key="pref_key_y"
+            android:title="Y"
+            />
+        <com.sciaps.android.libs.mainsettings.utils.XYZPref
+            android:key="pref_key_z"
+            android:title="Z"
+            />
     </PreferenceCategory>
         <PreferenceCategory
             android:title="Auto Adjust XYZ">
