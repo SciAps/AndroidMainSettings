@@ -56,9 +56,9 @@ public class XYZPref extends Preference implements View.OnClickListener, SeekBar
 
       //   mProgresslbl = (TextView)myLayout.findViewById(R.id.txt_progress);
 
-        SharedPreferences prefs = getContext().getSharedPreferences("libz_main", PreferenceActivity.MODE_PRIVATE);
+        //SharedPreferences prefs = getContext().getSharedPreferences("libz_main", PreferenceActivity.MODE_PRIVATE);
 
-        mSeekbar.setProgress(prefs.getInt(this.getKey(),0));
+        //mSeekbar.setProgress(prefs.getInt(this.getKey(),0));
 
 
 
@@ -71,34 +71,21 @@ public class XYZPref extends Preference implements View.OnClickListener, SeekBar
     @Override
     public void onClick(View view) {
         if (mSeekbar!=null){
-                int val = mSeekbar.getProgress();
+            int val = mSeekbar.getProgress();
 
-            if ( view.getTag().equals("+")){
+            if ("+".equals(view.getTag())){
                 val++;
             }else {
                 val--;
             }
-            if (val>=0&&val<=100){
-                mSeekbar.setProgress(val);
-                setSummary(val+"");
-
-            }
+            val = Math.min(100, Math.max(0, val));
+            mSeekbar.setProgress(val);
         }
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {}
 
-        setSummary(i + "");
-
-
-        SharedPreferences prefs = getContext().getSharedPreferences("libz_main",PreferenceActivity.MODE_PRIVATE);
-            SharedPreferences.Editor edit = prefs.edit();
-            edit.putInt(this.getKey(),i);
-
-            edit.commit();
-
-        }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
