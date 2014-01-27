@@ -1,5 +1,6 @@
 package com.sciaps.android.libs.mainsettings;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private static final int CELSIUS = 1;
 
 
+    @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +123,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 .registerOnSharedPreferenceChangeListener(this);
     }
 
+    @SuppressLint("NewApi")
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
 
@@ -176,6 +179,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         LibzSettings.writeSettingsXml(getApplicationContext());
     }
     private boolean changeFMPref = true;
+    @SuppressLint("NewApi")
     private void showPasswordDialog() {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
